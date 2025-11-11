@@ -1,0 +1,107 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    background-image: url(background.jpg);
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.weatherTitle{
+    font-family: monospace;
+    font-size: 3rem;
+    font-weight: bold;
+    color: white
+}
+
+.weatherForm{
+    margin: 10px;
+}
+
+.cityInput{
+    padding: 15px;
+    margin-right: 150px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 15px;
+}
+
+.weatherForm button{
+    padding: 15px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 15px;
+    border: none;
+    background-color: hsl(180, 73%, 50%);
+    cursor: pointer;
+    color: black;
+}
+.weatherForm button:hover{
+    background-color: hsl(180, 73%, 60%);
+}
+
+.weatherCard{
+    background: linear-gradient(180deg, hsl(210, 100%, 75%), hsl(40, 100%, 75%));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 5px solid hsl(35, 50%, 66%);
+    border-radius: 20px;
+    box-shadow: 2px 2px 5px hsla(5, 50%, 66%, 0.5);
+    padding: 50px;
+    margin: 30px;
+}
+
+h1{
+    font-size: 3rem;
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+p{
+    font-size: 2rem;
+    margin: 5px 0;
+}
+
+.weatherMain {
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    gap: 15px; 
+  }
+  
+
+.cityDisplay, .tempDisplay{
+    font-size: 3rem;
+    font-weight: bold;
+    color: hsla(0, 0%, 0%, 0.75);
+    margin-bottom: 25px;
+}
+.weatherEmoji{
+    margin: 0;
+    font-size: 4rem;
+}
+.descDisplay{
+    font-style: italic;
+    font-weight: bold;
+    font-size: 2rem;
+    margin-bottom: 55px;
+}
+
+.humidityDisplay{
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.feelsLikeDisplay{
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.errorDisplay{
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: hsla(0, 0%, 0%, 0.75);
+}
