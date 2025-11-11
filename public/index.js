@@ -1,4 +1,5 @@
-/// FRONTEND - TALKS TO SERVER, DISPLAYS RESULTS IN THE WEB PAGE
+/// Frontend, displays results in the web page
+/// Sends requests to server.js
 
 const weatherForm = document.querySelector(".weatherForm");
 const cityInput = document.querySelector(".cityInput");
