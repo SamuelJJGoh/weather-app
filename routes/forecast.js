@@ -1,6 +1,3 @@
-/// Handles just /weather requests, talks to OpenWeather API
-/// Only receives requests forwarded by server.js
-
 import express from "express";
 import fetch from "node-fetch";
 import dotenv from "dotenv";
@@ -9,7 +6,6 @@ dotenv.config();
 
 const router = express.Router();
 
-// define the / route (so this becomes /weather when imported in server.js)
 router.get("/", async (req, res) => {
     const city = req.query.city;
     const apiKey = process.env.API_KEY;
@@ -20,11 +16,12 @@ router.get("/", async (req, res) => {
   
     try {
         const response = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`
+            // fetches 5 day forecast (40 entries, 8 per day)
+            `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`
         );
     
         if (!response.ok) {
-            throw new Error("Failed to fetch weather data");
+            throw new Error("Failed to fetch weather forecast");
         }
     
         const data = await response.json();
