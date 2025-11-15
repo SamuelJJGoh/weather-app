@@ -5,6 +5,19 @@ const weatherForm = document.querySelector(".weatherForm");
 const cityInput = document.querySelector(".cityInput");
 const weatherCard = document.querySelector(".weatherCard");
 const weatherMain = document.querySelector(".weatherMain");
+const unitSwitch = document.getElementById("unitSwitch");
+const unitLabel = document.getElementById("unitLabel");
+let isCelsius = true; 
+let currentWeatherData = null;
+
+unitSwitch.addEventListener("change", () => {
+    isCelsius = !isCelsius;
+    unitLabel.textContent = isCelsius ? "°C" : "°F";
+
+    if (currentWeatherData) {
+      displayWeatherInfo(currentWeatherData);
+    }
+});
 
 weatherForm.addEventListener("submit", async event => {
     event.preventDefault();
@@ -35,6 +48,9 @@ weatherForm.addEventListener("submit", async event => {
 });
 
 function displayWeatherInfo(data){
+  // save data as currentWeatherData so that no new fetch from the API is needed
+    currentWeatherData = data; 
+
     const {name: city,
            main: {temp, humidity, feels_like}, 
            weather: [{id, description}]} = data;
@@ -59,8 +75,16 @@ function displayWeatherInfo(data){
     weatherEmoji.textContent = getWeatherEmoji(id);
     weatherEmoji.classList.add("weatherEmoji");
     weatherMain.appendChild(weatherEmoji);
+    
+    const tempC = temp - 273.15;
+    const feelsLikeC = feels_like - 273.15;
 
-    tempDisplay.textContent = `${(temp - 273.15).toFixed(1)}°C`;
+    const displayTemp = isCelsius ? tempC : (tempC * 9/5) + 32;
+    const displayFeelsLike = isCelsius ? feelsLikeC : (feelsLikeC * 9/5) + 32;
+
+    const unit = isCelsius ? "°C" : "°F";
+
+    tempDisplay.textContent = `${(displayTemp).toFixed(1)}${unit}`;
     tempDisplay.classList.add("tempDisplay");
     weatherMain.appendChild(tempDisplay);
 
@@ -74,7 +98,7 @@ function displayWeatherInfo(data){
     humidityDisplay.classList.add("humidityDisplay");
     weatherCard.appendChild(humidityDisplay);
 
-    feelsLikeDisplay.textContent = `🌡️ Feels like: ${(feels_like - 273.15).toFixed(1)}°C`;
+    feelsLikeDisplay.textContent = `🌡️ Feels like: ${(displayFeelsLike).toFixed(1)}${unit}`;
     feelsLikeDisplay.classList.add("feelsLikeDisplay");
     weatherCard.appendChild(feelsLikeDisplay);
 }
