@@ -67,13 +67,27 @@ p{
     margin: 5px 0;
 }
 
-.weatherMain {
+.weatherMain{
     display: flex;
     align-items: center; 
     justify-content: center; 
     gap: 15px; 
   }
   
+.cityContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.mapIcon{
+    width: 50px;
+    height: 50px;
+    margin-right: 5px;
+    transform: translateY(-10px);
+}
 
 .cityDisplay, .tempDisplay{
     font-size: 3rem;
@@ -81,15 +95,31 @@ p{
     color: hsla(0, 0%, 0%, 0.75);
     margin-bottom: 25px;
 }
-.weatherEmoji{
-    margin: 0;
-    font-size: 4rem;
+.weatherIcon{
+    width: 80px;
+    height: 80px;
+    margin: 15px;
+    transform: translateY(-10px);
 }
 .descDisplay{
     font-style: italic;
     font-weight: bold;
     font-size: 2rem;
     margin-bottom: 55px;
+}
+
+.humidityContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.waterIcon{
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
 }
 
 .humidityDisplay{
@@ -106,7 +136,7 @@ p{
     color: hsla(0, 0%, 0%, 0.75);
 }
 
-.unitToggle {
+.unitToggle{
     position: absolute;
     bottom: 15px;
     left: 15px;
@@ -120,20 +150,20 @@ p{
 }
 
 /* container for the whole toggle */
-.switch { 
+.switch{ 
     position: relative;
     display: inline-block;
     width: 60px;
     height: 35px;
 }
-.switch input {
+.switch input{
     opacity: 0;
     width: 0;
     height: 0;
 }
 
 /* the coloured background */
-.slider {
+.slider{
     position: absolute;
     cursor: pointer;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -142,7 +172,7 @@ p{
     border-radius: 35px;
 }
 /* the circular knob that slides */
-.slider::before {
+.slider::before{
     position: absolute;
     content: "";
     height: 26px;
@@ -154,10 +184,10 @@ p{
     border-radius: 50%;
 }
 
-input:checked + .slider {
+input:checked + .slider{
     background-color: hsl(242, 57%, 48%);
 }
 
-input:checked + .slider::before {
+input:checked + .slider::before{
     transform: translateX(26px);
 }

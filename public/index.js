@@ -5,6 +5,7 @@ const weatherForm = document.querySelector(".weatherForm");
 const cityInput = document.querySelector(".cityInput");
 const weatherCard = document.querySelector(".weatherCard");
 const weatherMain = document.querySelector(".weatherMain");
+
 const unitSwitch = document.getElementById("unitSwitch");
 const unitLabel = document.getElementById("unitLabel");
 let isCelsius = true; 
@@ -60,23 +61,43 @@ function displayWeatherInfo(data){
 
     weatherMain.textContent = "";
     weatherMain.style.display = "flex";
-
+    
+    const cityContainer = document.createElement("div");
+    cityContainer.classList.add("cityContainer");
+    const mapIcon = document.createElement("img");
     const cityDisplay = document.createElement("h1");
+
+    const weatherIcon = document.createElement("img");
     const tempDisplay = document.createElement("p");
-    const humidityDisplay = document.createElement("p");
-    const feelsLikeDisplay = document.createElement("p");
+
     const descDisplay = document.createElement("p");
-    const weatherEmoji = document.createElement("p");
+
+    const humidityContainer = document.createElement("div");
+    humidityContainer.classList.add("humidityContainer");
+    const waterIcon = document.createElement("img");
+    const humidityDisplay = document.createElement("p");
+
+    const feelsLikeContainer = document.createElement("div");
+    feelsLikeContainer.classList.add("humidityContainer");
+    const thermometerIcon = document.createElement("img");
+    const feelsLikeDisplay = document.createElement("p");
     
-    cityDisplay.textContent = `📍 ${city}`;
+    mapIcon.src = `icons/map-pin.svg`;
+    mapIcon.alt = "map pin svg icon";
+    mapIcon.classList.add("mapIcon");
+    cityContainer.appendChild(mapIcon);
+
+    cityDisplay.textContent = `${city}`;
     cityDisplay.classList.add("cityDisplay");
-    weatherCard.appendChild(cityDisplay);
+    cityContainer.appendChild(cityDisplay);
+    weatherCard.appendChild(cityContainer);
+  
+    weatherIcon.src = `icons/weather_conditions/${getWeatherIcon(id)}.svg`;
+    weatherIcon.alt = description;
+    weatherIcon.classList.add("weatherIcon");
+    weatherMain.appendChild(weatherIcon);
     
-    weatherEmoji.textContent = getWeatherEmoji(id);
-    weatherEmoji.classList.add("weatherEmoji");
-    weatherMain.appendChild(weatherEmoji);
-    
-    const tempC = temp - 273.15;
+    const tempC = temp - 273.15; // temp is given in Kelvin
     const feelsLikeC = feels_like - 273.15;
 
     const displayTemp = isCelsius ? tempC : (tempC * 9/5) + 32;
@@ -93,35 +114,47 @@ function displayWeatherInfo(data){
     descDisplay.textContent = description;
     descDisplay.classList.add("descDisplay");
     weatherCard.appendChild(descDisplay);
-  
-    humidityDisplay.textContent = `💧 Humidity: ${humidity}%`;
+    
+    waterIcon.src = "icons/water-droplet.svg";
+    waterIcon.alt = "humidity icon";
+    waterIcon.classList.add("waterIcon");
+    humidityContainer.appendChild(waterIcon);
+    
+    humidityDisplay.textContent = `Humidity: ${humidity}%`;
     humidityDisplay.classList.add("humidityDisplay");
-    weatherCard.appendChild(humidityDisplay);
+    humidityContainer.appendChild(humidityDisplay);
+    weatherCard.appendChild(humidityContainer);
+    
+    thermometerIcon.src = "icons/thermometer.svg";
+    thermometerIcon.alt = "thermometer icon";
+    thermometerIcon.classList.add("waterIcon");
+    feelsLikeContainer.appendChild(thermometerIcon);
 
-    feelsLikeDisplay.textContent = `🌡️ Feels like: ${(displayFeelsLike).toFixed(1)}${unit}`;
+    feelsLikeDisplay.textContent = `Feels like: ${(displayFeelsLike).toFixed(1)}${unit}`;
     feelsLikeDisplay.classList.add("feelsLikeDisplay");
-    weatherCard.appendChild(feelsLikeDisplay);
+    feelsLikeContainer.appendChild(feelsLikeDisplay);
+    weatherCard.appendChild(feelsLikeContainer);
 }
 
-function getWeatherEmoji(weatherId){
+function getWeatherIcon(weatherId){
 
     switch(true){
       case (weatherId >= 200 && weatherId < 300):
-        return "⛈️";
+        return "thunderstorm";
       case (weatherId >= 300 && weatherId < 400):
-        return "🌦️";
+        return "drizzle";
       case (weatherId >= 500 && weatherId < 600):
-        return "🌧️";
+        return "rain";
       case (weatherId >= 600 && weatherId < 700):
-        return "❄️";
+        return "snow";
       case (weatherId >= 700 && weatherId < 800):
-        return "🌫️";
+        return "fog";
       case (weatherId === 800):
-        return "☀️";
+        return "sun";
       case (weatherId > 800 && weatherId < 810):
-        return "☁️";
+        return "cloudy";
       default:
-        return "❓";
+        return "unknown";
     }
   }
 
