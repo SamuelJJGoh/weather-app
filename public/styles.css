@@ -11,19 +11,21 @@ body{
 }
 
 .weatherTitle{
-    font-family: monospace;
+    font-family: Arial, sans-serif;
     font-size: 3rem;
     font-weight: bold;
     color: white
 }
 
 .weatherForm{
+    display: flex;
+    flex: 1;
+    gap: 15px;
     margin: 10px;
 }
 
 .cityInput{
     padding: 15px;
-    margin-right: 150px;
     font-size: 1.5rem;
     font-weight: bold;
     border: none;
@@ -52,7 +54,7 @@ body{
     border: 5px solid hsl(35, 50%, 66%);
     border-radius: 20px;
     box-shadow: 2px 2px 5px hsla(5, 50%, 66%, 0.5);
-    padding: 50px;
+    padding: 20px 50px 20px 50px;  /* top, right, bottom, left */
     margin: 30px;
 }
 
@@ -137,9 +139,6 @@ p{
 }
 
 .unitToggle{
-    position: absolute;
-    bottom: 15px;
-    left: 15px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -190,4 +189,49 @@ input:checked + .slider{
 
 input:checked + .slider::before{
     transform: translateX(26px);
+}
+
+.footerContainer{
+    display: flex;
+    align-self: stretch;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 30px -50px -20px -50px;  
+
+}
+.forecastButton img, .saveCityButton img{
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    transform: translateY(6px);
+}
+
+.forecastButton{
+    background-color: hsl(160, 100%, 75%);
+    border: none;
+    border-radius: 0 0 0 15px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    white-space: nowrap;  
+}
+.forecastButton:hover{
+    background-color: hsl(160, 100%, 85%);
+}
+
+.saveCityButton{
+    background-color: hsl(210, 100%, 75%);
+    border: none;
+    border-radius: 0 0 15px 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    white-space: nowrap;  
+}
+.saveCityButton:hover{
+    background-color: hsl(210, 100%, 80%);
 }

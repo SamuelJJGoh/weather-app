@@ -12,18 +12,17 @@
     <form class="weatherForm">
         <input type="text" class="cityInput" placeholder="Enter city name...">
         <button type="submit">Get Weather</button>
+        <div class="unitToggle">
+            <label class="switch">
+                <input type="checkbox" id="unitSwitch">
+                <span class="slider"></span>
+            </label>
+            <span id="unitLabel">°C</span>
+        </div>
     </form>
     
     <div class="weatherCard" style="display: none">
         <div class="weatherMain" style="display: none"></div>
-    </div>
-
-    <div class="unitToggle">
-        <label class="switch">
-            <input type="checkbox" id="unitSwitch">
-            <span class="slider"></span>
-        </label>
-        <span id="unitLabel">°C</span>
     </div>
 
     <script src="index.js"></script>

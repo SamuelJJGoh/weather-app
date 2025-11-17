@@ -134,6 +134,27 @@ function displayWeatherInfo(data){
     feelsLikeDisplay.classList.add("feelsLikeDisplay");
     feelsLikeContainer.appendChild(feelsLikeDisplay);
     weatherCard.appendChild(feelsLikeContainer);
+
+    const footerContainer = document.createElement("div");
+    footerContainer.classList.add("footerContainer");
+    weatherCard.appendChild(footerContainer);
+
+    const forecastButton = document.createElement("button");
+    forecastButton.type = "button";
+    forecastButton.classList.add("forecastButton");
+    forecastButton.innerHTML = `
+      <img src = "icons/calendar.svg" alt="calendar icon" class="calendarIcon">
+      5-Day Forecast`;
+
+    const saveCityButton = document.createElement("button");
+    saveCityButton.type = "button";
+    saveCityButton.classList.add("saveCityButton");
+    saveCityButton.innerHTML = `
+    <img src = "icons/star.svg" alt="star icon" class="starIcon">
+    Save City`;
+
+    footerContainer.appendChild(forecastButton);
+    footerContainer.appendChild(saveCityButton);
 }
 
 function getWeatherIcon(weatherId){
