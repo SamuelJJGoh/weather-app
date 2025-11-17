@@ -68,6 +68,7 @@ function displayWeatherInfo(data){
     const cityDisplay = document.createElement("h1");
 
     const weatherIcon = document.createElement("img");
+    const snowIcon = document.createElement("img");
     const tempDisplay = document.createElement("p");
 
     const descDisplay = document.createElement("p");
@@ -91,11 +92,19 @@ function displayWeatherInfo(data){
     cityDisplay.classList.add("cityDisplay");
     cityContainer.appendChild(cityDisplay);
     weatherCard.appendChild(cityContainer);
-  
-    weatherIcon.src = `icons/weather_conditions/${getWeatherIcon(id)}.svg`;
-    weatherIcon.alt = description;
-    weatherIcon.classList.add("weatherIcon");
-    weatherMain.appendChild(weatherIcon);
+      
+    if (getWeatherIcon(id) === "snow"){
+        snowIcon.src = `icons/weather_conditions/snow.svg`;
+        snowIcon.alt = description;
+        snowIcon.classList.add("snowIcon");
+        weatherMain.appendChild(snowIcon);
+    }
+    else{
+        weatherIcon.src = `icons/weather_conditions/${getWeatherIcon(id)}.svg`;
+        weatherIcon.alt = description;
+        weatherIcon.classList.add("weatherIcon");
+        weatherMain.appendChild(weatherIcon);
+    }
     
     const tempC = temp - 273.15; // temp is given in Kelvin
     const feelsLikeC = feels_like - 273.15;

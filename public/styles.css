@@ -103,6 +103,12 @@ p{
     margin: 15px;
     transform: translateY(-10px);
 }
+.snowIcon{
+    width: 60px;
+    height: 60px;
+    margin: 15px;
+    transform: translateY(-10px);
+}
 .descDisplay{
     font-style: italic;
     font-weight: bold;
