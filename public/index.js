@@ -1,6 +1,8 @@
 /// Frontend, displays results in the web page
 /// Sends requests to server.js
 
+const BACKEND_URL = "http://localhost:3000";
+
 const weatherForm = document.querySelector(".weatherForm");
 const cityInput = document.querySelector(".cityInput");
 const weatherCard = document.querySelector(".weatherCard");
@@ -28,7 +30,9 @@ weatherForm.addEventListener("submit", async event => {
     if(city){
         try{
             // fetch from backend instead of OpenWeather directly
-            const apiUrl = `/weather?city=${city}`;
+            const apiUrl = `${BACKEND_URL}/weather?city=${city}`;
+            fetch("http://localhost:3000/weather?city=London")
+
             const response = await fetch(apiUrl);
 
             if(!response.ok){
