@@ -8,11 +8,15 @@ const cityInput = document.querySelector(".cityInput");
 const weatherCard = document.querySelector(".weatherCard");
 const weatherMain = document.querySelector(".weatherMain");
 const contentLayout = document.querySelector(".contentLayout");
+const favouritesList = document.querySelector(".favouritesList");
+
+const FAVOURITES_KEY = "favouriteCities";
 
 const unitSwitch = document.getElementById("unitSwitch");
 const unitLabel = document.getElementById("unitLabel");
 let isCelsius = true; 
 let currentWeatherData = null;
+let currentForecastData = null;
 
 
 unitSwitch.addEventListener("change", () => {
@@ -30,35 +34,127 @@ unitSwitch.addEventListener("change", () => {
 weatherForm.addEventListener("submit", async event => {
     event.preventDefault();
 
-    const city = cityInput.value;
-
+    const city = cityInput.value.trim();
     if(city){
-        try{
-            // fetch from backend instead of OpenWeather directly
-            const apiUrl = `${BACKEND_URL}/weather?city=${city}`;
-            const response = await fetch(apiUrl);
-
-            if(!response.ok){
-                throw new Error("Could not fetch weather data");
-            }
-
-            const weatherData = await response.json();
-            let oldForecast = document.querySelector(".forecastSection");
-            if (oldForecast){
-              oldForecast.remove();
-              weatherCard.classList.remove("showingForecast");
-            }
-            displayWeatherInfo(weatherData);
-        }
-        catch(error){ //catches anything thrown inside the try block
-            console.error(error);
-            displayError(error);
-        }
+      try{
+        loadCityWeather(city);
+      }
+      catch(error){
+        console.error(error);
+        displayError(error);
+      }
     }
     else{ // if the user did not type anything
         displayError("Please enter a city...");   
     }
 });
+
+function getFavouriteCities(){
+    try{
+      const stored = localStorage.getItem(FAVOURITES_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+}
+
+function setFavouriteCities(cities){
+    localStorage.setItem(FAVOURITES_KEY, JSON.stringify(cities));
+}
+
+function isCityFavourite(city){
+    const favourites = getFavouriteCities();
+    return favourites.includes(city);
+}
+
+function renderFavourites(){
+    if(!favouritesList) return;
+
+    favouritesList.textContent = "";
+    const favourites = getFavouriteCities();
+
+    if(!favourites.length){
+      const empty = document.createElement("p");
+      empty.classList.add("favouritesEmpty");
+      empty.textContent = "No saved cities yet.";
+      favouritesList.appendChild(empty);
+      return; // exits renderFavourites() function
+    }
+
+    favourites.forEach(city => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.classList.add("favouriteChip");
+      btn.textContent = city;
+      btn.addEventListener("click", () => {
+        cityInput.value = "";
+        loadCityWeather(city);
+      });
+      favouritesList.appendChild(btn);
+    });
+}
+
+function toggleFavouriteCity(button){
+    if(!currentWeatherData) return;
+
+    const city = currentWeatherData.name;
+
+    if(isCityFavourite(city)){ 
+      // exclude any entry equal to the provided city, producing a new array without that city
+      const favourites = getFavouriteCities().filter(item => item !== city); 
+      setFavouriteCities(favourites);
+    } else {
+      let favourites = getFavouriteCities();
+      favourites.unshift(city); // puts newest saved city at the front of the favourites list
+      favourites = favourites.slice(0, 10); // only keeps the 10 most recent searches
+      setFavouriteCities(favourites);
+    }
+
+    renderFavourites();
+    updateFavouriteButton(button);
+}
+
+function updateFavouriteButton(button){
+    if(!currentWeatherData) return;
+
+    const city = currentWeatherData.name;
+    const isFav = isCityFavourite(city);
+
+    button.innerHTML = `
+    <img src = "icons/star.svg" alt="star icon" class="starIcon">
+    ${isFav ? "Remove City" : "Save City"}`;
+}
+
+async function loadCityWeather(city){
+    try{
+        clearForecast();
+        // fetch from backend instead of OpenWeather directly
+        const apiUrl = `${BACKEND_URL}/weather?city=${city}`;
+        const response = await fetch(apiUrl);
+
+        if(!response.ok){
+          throw new Error("Could not fetch weather data");
+        }
+
+        const weatherData = await response.json();
+        displayWeatherInfo(weatherData);
+    }
+    catch(error){
+        console.error(error);
+        displayError(error.message || error);
+    }
+}
+
+function clearForecast(){
+    let oldForecast = document.querySelector(".forecastSection");
+    if (oldForecast){
+      oldForecast.remove();
+      weatherCard.classList.remove("showingForecast");
+    }
+}
+
+// Initialise favourites on load
+renderFavourites();
 
 function displayWeatherInfo(data){
   // save data as currentWeatherData so that no new fetch from the API is needed
@@ -180,7 +276,6 @@ function displayWeatherInfo(data){
           }
 
           const forecastData = await response.json();
-          console.log("Forecast:", forecastData);
           displayForecast(forecastData);
         }
         catch(error){
@@ -198,69 +293,68 @@ function displayWeatherInfo(data){
 
     footerContainer.appendChild(forecastButton);
     footerContainer.appendChild(saveCityButton);
+
+    updateFavouriteButton(saveCityButton);
+    saveCityButton.addEventListener("click", () => toggleFavouriteCity(saveCityButton));
 }
 
 function displayForecast(forecastData){
-  currentForecastData = forecastData;
+    currentForecastData = forecastData;
 
-  let oldForecast = document.querySelector(".forecastSection");
-  if (oldForecast){
-    oldForecast.remove();
-  }
+    clearForecast();
 
-  weatherCard.classList.add("showingForecast");
+    weatherCard.classList.add("showingForecast");
 
-  const forecastSection = document.createElement("div");
-  forecastSection.classList.add("forecastSection");
+    const forecastSection = document.createElement("div");
+    forecastSection.classList.add("forecastSection");
 
-  const title = document.createElement("h2");
-  title.textContent = "5-Day Forecast";
-  title.classList.add("forecastTitle");
+    const title = document.createElement("h2");
+    title.textContent = "5-Day Forecast";
+    title.classList.add("forecastTitle");
 
-  const container = document.createElement("div");
-  container.classList.add("forecastContainer");
+    const container = document.createElement("div");
+    container.classList.add("forecastContainer");
 
-  const middayForecasts = forecastData.list.filter(item => 
-    item.dt_txt.includes("12:00:00")
-  );
+    const middayForecasts = forecastData.list.filter(item => 
+      item.dt_txt.includes("12:00:00")
+    );
 
-  middayForecasts.forEach(item => {
-    const card = document.createElement("div");
-    card.classList.add("forecastCard");
+    middayForecasts.forEach(item => {
+      const card = document.createElement("div");
+      card.classList.add("forecastCard");
 
-    const date = new Date(item.dt_txt);
-    const weekday = date.toLocaleString("en-GB", { weekday: "short"});
+      const date = new Date(item.dt_txt);
+      const weekday = date.toLocaleString("en-GB", { weekday: "short"});
 
-    const day = document.createElement("p");
-    day.classList.add("forecastDay");
-    day.textContent = weekday;
+      const day = document.createElement("p");
+      day.classList.add("forecastDay");
+      day.textContent = weekday;
 
-    const icon = document.createElement("img");
-    icon.classList.add("forecastIcon");
-    icon.src = `icons/weather_conditions/${getWeatherIcon(item.weather[0].id)}.svg`;
+      const icon = document.createElement("img");
+      icon.classList.add("forecastIcon");
+      icon.src = `icons/weather_conditions/${getWeatherIcon(item.weather[0].id)}.svg`;
 
-    const tempC = item.main.temp - 273.15;
-    const displayTemp = isCelsius ? tempC : (tempC * 9/5) + 32;
-    const unit = isCelsius ? "°C" : "°F";
-    const temp = document.createElement("p");
-    temp.classList.add("forecastTemp");
-    temp.textContent = `${(displayTemp).toFixed(1)}${unit}`;
+      const tempC = item.main.temp - 273.15;
+      const displayTemp = isCelsius ? tempC : (tempC * 9/5) + 32;
+      const unit = isCelsius ? "°C" : "°F";
+      const temp = document.createElement("p");
+      temp.classList.add("forecastTemp");
+      temp.textContent = `${(displayTemp).toFixed(1)}${unit}`;
 
-    card.appendChild(day);
-    card.appendChild(icon);
-    card.appendChild(temp);
+      card.appendChild(day);
+      card.appendChild(icon);
+      card.appendChild(temp);
 
-    container.appendChild(card);
-  })
+      container.appendChild(card);
+    })
 
-  forecastSection.appendChild(title);
-  forecastSection.appendChild(container);
+    forecastSection.appendChild(title);
+    forecastSection.appendChild(container);
 
-  contentLayout.appendChild(forecastSection);
+    contentLayout.appendChild(forecastSection);
 }
 
 function getWeatherIcon(weatherId){
-
     switch(true){
       case (weatherId >= 200 && weatherId < 300):
         return "thunderstorm";
@@ -282,6 +376,7 @@ function getWeatherIcon(weatherId){
   }
 
 function displayError(message){
+    clearForecast();
     const errorDisplay = document.createElement("p");
     errorDisplay.textContent = message;
     errorDisplay.classList.add("errorDisplay");

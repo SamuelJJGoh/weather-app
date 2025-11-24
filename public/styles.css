@@ -282,11 +282,9 @@ input:checked + .slider::before{
     overflow-x: auto;
     padding-bottom: 10px;
 }
-
 .forecastContainer::-webkit-scrollbar{
     height: 8px;
 }
-
 .forecastContainer::-webkit-scrollbar-thumb{
     background: hsla(0,0%,100%,0.5);
     border-radius: 5px;
@@ -299,19 +297,57 @@ input:checked + .slider::before{
     padding: 10px;
     text-align: center;
 }
-
 .forecastDay{
     font-weight: bold;
     font-size: 1.2rem;
 }
-
 .forecastIcon{
     width: 50px;
     height: 50px;
     margin: 10px 0;
 }
-
 .forecastTemp{
     font-size: 1.3rem;
     font-weight: bold;
+}
+
+.favouritesSection{
+    width: 100%;
+    max-width: 960px;
+    padding: 0 20px;
+    box-sizing: border-box;
+    margin-top: 10px;
+}
+
+.favouritesTitle{
+    color: white;
+    margin: 10px 0 10px 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.favouritesList{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-height: 40px;
+}
+
+.favouriteChip{
+    background: hsla(0,0%,100%,0.75);
+    color: #222;
+    border: none;
+    border-radius: 999px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.1s ease;
+}
+.favouriteChip:hover{
+    transform: translateY(-1px);
+}
+
+.favouritesEmpty{
+    color: rgba(255,255,255,0.8);
+    font-style: italic;
 }
