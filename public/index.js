@@ -7,11 +7,13 @@ const weatherForm = document.querySelector(".weatherForm");
 const cityInput = document.querySelector(".cityInput");
 const weatherCard = document.querySelector(".weatherCard");
 const weatherMain = document.querySelector(".weatherMain");
+const contentLayout = document.querySelector(".contentLayout");
 
 const unitSwitch = document.getElementById("unitSwitch");
 const unitLabel = document.getElementById("unitLabel");
 let isCelsius = true; 
 let currentWeatherData = null;
+
 
 unitSwitch.addEventListener("change", () => {
     isCelsius = !isCelsius;
@@ -19,6 +21,9 @@ unitSwitch.addEventListener("change", () => {
 
     if (currentWeatherData) {
       displayWeatherInfo(currentWeatherData);
+    }
+    if (currentForecastData){
+      displayForecast(currentForecastData);
     }
 });
 
@@ -31,8 +36,6 @@ weatherForm.addEventListener("submit", async event => {
         try{
             // fetch from backend instead of OpenWeather directly
             const apiUrl = `${BACKEND_URL}/weather?city=${city}`;
-            fetch("http://localhost:3000/weather?city=London")
-
             const response = await fetch(apiUrl);
 
             if(!response.ok){
@@ -40,6 +43,11 @@ weatherForm.addEventListener("submit", async event => {
             }
 
             const weatherData = await response.json();
+            let oldForecast = document.querySelector(".forecastSection");
+            if (oldForecast){
+              oldForecast.remove();
+              weatherCard.classList.remove("showingForecast");
+            }
             displayWeatherInfo(weatherData);
         }
         catch(error){ //catches anything thrown inside the try block
@@ -159,6 +167,28 @@ function displayWeatherInfo(data){
       <img src = "icons/calendar.svg" alt="calendar icon" class="calendarIcon">
       5-Day Forecast`;
 
+    forecastButton.addEventListener("click", async event => {
+        event.preventDefault();
+        const city = currentWeatherData.name;
+
+        try{
+          const apiUrl = `${BACKEND_URL}/forecast?city=${city}`;
+          const response = await fetch(apiUrl);
+
+          if(!response.ok){
+            throw new Error("Could not fetch forecast");
+          }
+
+          const forecastData = await response.json();
+          console.log("Forecast:", forecastData);
+          displayForecast(forecastData);
+        }
+        catch(error){
+          console.error(error);
+          displayError(error);
+        }
+    });
+
     const saveCityButton = document.createElement("button");
     saveCityButton.type = "button";
     saveCityButton.classList.add("saveCityButton");
@@ -168,6 +198,65 @@ function displayWeatherInfo(data){
 
     footerContainer.appendChild(forecastButton);
     footerContainer.appendChild(saveCityButton);
+}
+
+function displayForecast(forecastData){
+  currentForecastData = forecastData;
+
+  let oldForecast = document.querySelector(".forecastSection");
+  if (oldForecast){
+    oldForecast.remove();
+  }
+
+  weatherCard.classList.add("showingForecast");
+
+  const forecastSection = document.createElement("div");
+  forecastSection.classList.add("forecastSection");
+
+  const title = document.createElement("h2");
+  title.textContent = "5-Day Forecast";
+  title.classList.add("forecastTitle");
+
+  const container = document.createElement("div");
+  container.classList.add("forecastContainer");
+
+  const middayForecasts = forecastData.list.filter(item => 
+    item.dt_txt.includes("12:00:00")
+  );
+
+  middayForecasts.forEach(item => {
+    const card = document.createElement("div");
+    card.classList.add("forecastCard");
+
+    const date = new Date(item.dt_txt);
+    const weekday = date.toLocaleString("en-GB", { weekday: "short"});
+
+    const day = document.createElement("p");
+    day.classList.add("forecastDay");
+    day.textContent = weekday;
+
+    const icon = document.createElement("img");
+    icon.classList.add("forecastIcon");
+    icon.src = `icons/weather_conditions/${getWeatherIcon(item.weather[0].id)}.svg`;
+
+    const tempC = item.main.temp - 273.15;
+    const displayTemp = isCelsius ? tempC : (tempC * 9/5) + 32;
+    const unit = isCelsius ? "°C" : "°F";
+    const temp = document.createElement("p");
+    temp.classList.add("forecastTemp");
+    temp.textContent = `${(displayTemp).toFixed(1)}${unit}`;
+
+    card.appendChild(day);
+    card.appendChild(icon);
+    card.appendChild(temp);
+
+    container.appendChild(card);
+  })
+
+  forecastSection.appendChild(title);
+  forecastSection.appendChild(container);
+
+  contentLayout.appendChild(forecastSection);
 }
 
 function getWeatherIcon(weatherId){

@@ -10,6 +10,17 @@ body{
     background-attachment: fixed;
 }
 
+.contentLayout{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    width: 100%;
+    flex-wrap: wrap;
+    padding: 0 20px 40px 20px;
+    box-sizing: border-box;
+}
+
 .weatherTitle{
     font-family: Arial, sans-serif;
     font-size: 3rem;
@@ -56,6 +67,11 @@ body{
     box-shadow: 2px 2px 5px hsla(5, 50%, 66%, 0.5);
     padding: 20px 50px 20px 50px;  /* top, right, bottom, left */
     margin: 30px;
+    transition: transform 0.3s ease;
+}
+
+.weatherCard.showingForecast{
+    transform: translateX(-30px);
 }
 
 h1{
@@ -240,4 +256,62 @@ input:checked + .slider::before{
 }
 .saveCityButton:hover{
     background-color: hsl(210, 100%, 80%);
+}
+
+.forecastSection{
+    width: 100%;
+    max-width: 700px;
+    flex: 1 1 360px;
+    background: hsla(0,0%,100%,0.3);;
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.forecastTitle{
+    color: white;
+    font-size: 2rem;
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.forecastContainer{
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.forecastContainer::-webkit-scrollbar{
+    height: 8px;
+}
+
+.forecastContainer::-webkit-scrollbar-thumb{
+    background: hsla(0,0%,100%,0.5);
+    border-radius: 5px;
+}
+
+.forecastCard{
+    min-width: 110px;
+    background: white;
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+}
+
+.forecastDay{
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.forecastIcon{
+    width: 50px;
+    height: 50px;
+    margin: 10px 0;
+}
+
+.forecastTemp{
+    font-size: 1.3rem;
+    font-weight: bold;
 }
