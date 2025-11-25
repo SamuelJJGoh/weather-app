@@ -26,6 +26,9 @@ npm start
 - Save/remove favourite cities; favourites persist in `localStorage` and render as quick-launch chips.
 - Basic error handling for missing/invalid cities.
 
+## Preview
+![Weather Web App](public/preview.png)
+
 ## Project structure
 - `server.js` — Express app wiring CORS + routes.
 - `routes/weather.js` — `/weather?city=...` proxy to OpenWeather current conditions.
