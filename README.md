@@ -3,7 +3,7 @@
 Simple full-stack weather dashboard with an Express backend proxying OpenWeather and a static frontend. Search by city to see current conditions, toggle °C/°F, view a 5‑day forecast, and save/remove favourite cities (persisted in `localStorage`).
 
 ## Quick start
-1) Install deps:
+1) Install dependencies:
 ```bash
 npm install
 ```
