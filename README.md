@@ -2,7 +2,7 @@
 
 Simple full-stack weather dashboard with an Express backend proxying OpenWeather and a static frontend. Search by city to see current conditions, toggle °C/°F, view a 5‑day forecast, and save/remove favourite cities (persisted in `localStorage`).
 
-## Quick start
+## How to run locally
 1) Install dependencies:
 ```bash
 npm install
@@ -17,7 +17,7 @@ npm run dev   # nodemon for dev
 # or
 npm start
 ```
-4) Open `public/index.html` in a browser (or serve the `public` folder via any static server) and point the UI at `http://localhost:3000` (already baked into `public/index.js`).
+4) Open `public/index.html` in a browser (e.g. open with Live Server on VS Code) and point the UI at `http://localhost:3000` (already baked into `public/index.js`).
 
 ## Features
 - Current weather by city (backend proxies OpenWeather, hiding the API key from the client).
